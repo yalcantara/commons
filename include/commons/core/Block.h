@@ -11,6 +11,8 @@
 #include <stdlib.h>
 #include <string>
 #include <sstream>
+#include <utility>
+#include <commons/core/lang.hpp>
 #include <commons/core/Exception.h>
 #include <commons/core/View.h>
 
@@ -37,27 +39,38 @@ private:
 		length = 0;
 	}
 
-	void release() {
+	void free() {
 		if (ptr) {
 			delete[] ptr;
+			ptr = nullptr;
+			length = 0;
 		}
 	}
 
 public:
 
-
 	Block() noexcept {
-		this->length = 0;
 		this->ptr = nullptr;
+		this->length = 0;
 	}
 
-	Block(size_t length) noexcept {
+	Block(size_t length) {
 
-		this->length = length;
 		this->ptr = new T[length]();
+		this->length = length;
 	}
 
-	//Rule of five (Constructors, Move Assignment & Destructor)
+	Block(size_t length, bool init) {
+
+		if (init) {
+			this->ptr = new T[length]();
+		} else {
+			this->ptr = new T[length];
+		}
+		this->length = length;
+	}
+
+	//Rule of five
 	//=========================================================================
 	//1. Copy Constructor
 	//We don't allow Block to be copied.
@@ -77,22 +90,12 @@ public:
 	}
 
 	//4. Move Assignment
-	//noexcept allows std containers to use it.
-	Block<T>& operator=(Block<T> && other) noexcept {
-		if (this == &other) {
-			return *this;
-		}
-
-		this->length = other.length;
-		this->ptr = other.ptr;
-		other.drop();
-
-		return *this;
-	}
+	//We don't allow Block to be copied.
+	Block<T>& operator=(Block<T> && other) = delete;
 
 	//5. Destructor
 	virtual ~Block() noexcept {
-		release();
+		free();
 	}
 	//=========================================================================
 
@@ -128,12 +131,51 @@ public:
 	//========================
 
 	const T& operator[](size_t idx) const {
-		check_idx(idx);
-		return ptr[idx];
+		return at(idx);
 	}
 
 	T& operator[](size_t idx) {
-		return ptr[idx];
+		return at(idx);
+	}
+
+	void print() {
+		ostringstream os;
+
+		os << "Block (";
+		os << to_string(length);
+		os << ")";
+
+		os << " [";
+
+		for (size_t i = 0; i < length; i++) {
+
+			T* p = data(i);
+
+			if (is_same<T, char>::value || is_same<T, const char>::value) {
+				char casted = *((char*) p);
+				if (casted == '\0') {
+					os << "''";
+				} else {
+					os << casted;
+				}
+			} else if (is_same<T, string>::value
+					|| is_same<T, const string>::value) {
+				os << '"';
+				os << to_string2(p);
+				os << '"';
+			} else {
+				os << to_string2(p);
+			}
+
+			if (i + 1 < length) {
+				os << ", ";
+			}
+		}
+
+		os << "]";
+
+		string str = os.str();
+		println(str);
 	}
 };
 

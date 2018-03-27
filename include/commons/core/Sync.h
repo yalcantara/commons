@@ -20,11 +20,12 @@ private:
 	mutex& mtx;
 
 public:
-	
-	Sync(mutex& mtx):Sync(mtx, true){
-		
-	} 
-	
+
+	Sync(mutex& mtx) :
+			Sync(mtx, true) {
+
+	}
+
 	Sync(mutex& mtx, bool lock) :
 			mtx(mtx) {
 		if (lock) {
@@ -32,11 +33,29 @@ public:
 		}
 	}
 
-	//no copy constructor
+	//Rule of five
+	//=========================================================================
+	//1. Copy Constructor
+	//No copy constructor allowed
 	Sync(const Sync&) = delete;
-	
-	//no move operator;
-	Sync& operator=(const Sync&) = delete;
+
+	//2. Copy Assignment
+	//no copy assignment allowed
+	Sync& operator=(const Sync& other) = delete;
+
+	//3. Move Constructor
+	//No move constructor allowed
+	Sync(Sync && other) = delete;
+
+	//4. Move Assignment
+	//No move assignment allowed
+	Sync& operator=(Sync && other) = delete;
+
+	//5. Destructor
+	virtual ~Sync() {
+		mtx.unlock();
+	}
+	//=========================================================================
 
 	void lock() {
 		mtx.lock();
@@ -50,9 +69,6 @@ public:
 		mtx.unlock();
 	}
 
-	virtual ~Sync() {
-		mtx.unlock();
-	}
 };
 
 }

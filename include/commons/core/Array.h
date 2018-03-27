@@ -38,9 +38,11 @@ private:
 		length = 0;
 	}
 
-	void release() {
+	void free() {
 		if (ptr) {
 			delete[] ptr;
+			ptr = nullptr;
+			length = 0;
 		}
 	}
 
@@ -50,28 +52,36 @@ public:
 			length(0) {
 	}
 
-	Array(size_t length) noexcept {
-		this->length = length;
+	Array(size_t length)  {
 		this->ptr = new T[length]();
+		this->length = length;
 	}
 
-	//Rule of five (Constructors, Move Assignment & Destructor)
+	//Rule of five
 	//=========================================================================
 	//1. Copy Constructor
 	Array(const Array<T>& other) noexcept {
 
-		this->length = other.length;
 		this->ptr = new T[other.length];
+		this->length = other.length;
 		std::copy(other.begin(), other.end(), ptr);
 	}
 
 	//2. Copy Assignment
 	Array<T>& operator=(const Array<T>& other) noexcept {
 
-		this->release();
-		this->length = other.length;
-		this->ptr = new T[other.length];
-		std::copy(other.begin(), other.end(), ptr);
+		//2 cases
+		if (this->length == other.length) {
+			//a. Same length, just copy
+			std::copy(other.begin(), other.end(), ptr);
+		} else {
+			//b. Different length, we need to free, allocate, then copy
+			free();
+			this->ptr = new T[other.length];
+			this->length = other.length;
+			std::copy(other.begin(), other.end(), ptr);
+		}
+
 		return *this;
 	}
 
@@ -79,8 +89,8 @@ public:
 	//noexcept allows std containers to use it.
 	Array(Array<T> && other) noexcept {
 
-		this->length = other.length;
 		this->ptr = other.ptr;
+		this->length = other.length;
 		other.drop();
 	}
 
@@ -91,8 +101,10 @@ public:
 			return *this;
 		}
 
-		this->length = other.length;
+		this->free();
+
 		this->ptr = other.ptr;
+		this->length = other.length;
 		other.drop();
 
 		return *this;
@@ -100,7 +112,7 @@ public:
 
 	//5. Destructor
 	virtual ~Array() noexcept {
-		release();
+		free();
 	}
 	//=========================================================================
 
@@ -136,26 +148,11 @@ public:
 	//========================
 
 	const T& operator[](size_t idx) const {
-		check_idx(idx);
-		return ptr[idx];
+		return at(idx);
 	}
 
 	T& operator[](size_t idx) {
-		return ptr[idx];
-	}
-
-	void for_each(void (*func)(T&)) {
-		for (size_t i = 0; i < length; i++) {
-			T& val = ptr[i];
-			func(val);
-		}
-	}
-
-	void for_each(void (*func)(T)) {
-		for (size_t i = 0; i < length; i++) {
-			T val = ptr[i];
-			func(val);
-		}
+		return at(idx);
 	}
 
 	void print() {

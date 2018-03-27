@@ -8,6 +8,10 @@
 #ifndef COMMONS_CORE_LANG_CPP_
 #define COMMONS_CORE_LANG_CPP_
 
+#ifndef byte
+#define byte unsigned char
+#endif
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
@@ -18,8 +22,6 @@
 
 #include <commons/core/Sync.h>
 
-using namespace std;
-
 namespace commons {
 namespace core {
 
@@ -28,7 +30,7 @@ mutex stdout_mutex;
 
 template<typename T>
 bool is_primitive() {
-	return is_arithmetic<T>::value || is_same<T, bool>::value;
+	return is_arithmetic < T > ::value || is_same<T, bool>::value;
 }
 
 template<typename T>
@@ -46,16 +48,16 @@ string to_string2(T* ptr) {
 		return "false";
 	}
 
-	if (is_integral<T>::value) {
+	if (is_integral < T > ::value) {
 
-		if (is_unsigned<T>::value) {
-			return std::to_string(*((unsigned long int*) ptr));
+		if (is_unsigned < T > ::value) {
+			return std::to_string(*((unsigned long*) ptr));
 		}
 
-		return std::to_string(*((long int*) ptr));
+		return std::to_string(*((int*) ptr));
 	}
 
-	if (is_floating_point<T>::value) {
+	if (is_floating_point < T > ::value) {
 		return std::to_string(*((double*) ptr));
 	}
 
@@ -67,19 +69,19 @@ string to_string2(T* ptr) {
 		return *((string*) ptr);
 	}
 
-	if (is_array<T>::value) {
+	if (is_array < T > ::value) {
 		return "[array]";
 	}
 
-	if (is_pointer<T>::value) {
+	if (is_pointer < T > ::value) {
 		return "[pointer]";
 	}
 
-	if (is_pod<T>::value) {
+	if (is_pod < T > ::value) {
 		return "[pod]";
 	}
 
-	if (is_class<T>::value) {
+	if (is_class < T > ::value) {
 		return "[class]";
 	}
 
@@ -114,6 +116,13 @@ void print(string& str) {
 void println() {
 	Sync sync(stdout_mutex);
 	fputc('\n', stdout);
+	fflush(stdout);
+}
+
+template<typename T>
+void println(T* ptr) {
+	Sync sync(stdout_mutex);
+	fprintf(stdout, "%p\n", ptr);
 	fflush(stdout);
 }
 

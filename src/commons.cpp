@@ -14,9 +14,16 @@
 #include <commons/core/Array.h>
 
 
+#include <stddef.h>
+#include <stdio.h>
+#include <errno.h>
+#include <stdlib.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+
+
 using namespace commons::core;
-
-
 
 class P {
 
@@ -25,6 +32,7 @@ public:
 	char sex;
 
 	P() {
+		cout<< "Constructor"<<endl;
 		edad = 9;
 		sex = 'f';
 	}
@@ -39,12 +47,12 @@ Block<float> send() {
 
 	Block<float> e(5);
 
-
 	return e;
 }
 
+void send2(Block<int>& r) {
 
-
+}
 
 void send2(Block<float>& r) {
 
@@ -52,19 +60,12 @@ void send2(Block<float>& r) {
 
 
 
-
-int main() {
-
-
+void test2() {
 	Block<float> A(10);
 
 	Block<float> pop = send();
 
-
-
-
 	send2(pop);
-
 
 	call(A.view());
 
@@ -76,7 +77,6 @@ int main() {
 	Array<bool> e(10);
 
 	Block<int> x(10);
-
 
 	for (size_t i = 0; i < e.size(); i++) {
 		e[i] = true;
@@ -91,12 +91,49 @@ int main() {
 	c.print();
 	d.print();
 	e.print();
+}
 
+Block<int> p;
+
+Block<int> ans() {
+
+	Block<int> r(3);
+
+	r[0] = 1;
+	r[1] = 2;
+	r[2] = 3;
+
+	return r;
+
+}
+
+Array<P> ans2(){
+
+	Array<P> arr(3);
+
+	arr[0].edad = 4;
+
+	println(&arr[0]);
+
+
+	return arr;
+
+}
+
+mutex m;
+
+int main() {
+
+
+	Array<P> a{10};
+
+
+	a = ans2();
+
+	println(&a[0]);
 
 
 
 	return 0;
 }
-
-
 

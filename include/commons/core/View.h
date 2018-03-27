@@ -48,11 +48,11 @@ public:
 	//=========================================================================
 
 
-	T* pointer() const {
+	T* data() const {
 		return ptr;
 	}
 
-	T* pointer(size_t idx) const {
+	T* data(size_t idx) const {
 		check_idx(idx);
 		return (ptr + idx);
 	}
@@ -68,7 +68,7 @@ public:
 	//========================
 
 	T& at(size_t idx) const {
-		return *pointer(idx);
+		return *data(idx);
 	}
 
 	const T& operator[](size_t idx) const {
