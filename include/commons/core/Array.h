@@ -13,6 +13,7 @@
 #include <sstream>
 #include <commons/core/Exception.h>
 #include <commons/core/lang.hpp>
+#include <commons/core/View.h>
 
 namespace commons {
 namespace core {
@@ -41,8 +42,7 @@ private:
 	void free() {
 		if (ptr) {
 			delete[] ptr;
-			ptr = nullptr;
-			length = 0;
+			drop();
 		}
 	}
 

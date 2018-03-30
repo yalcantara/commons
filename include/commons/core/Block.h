@@ -42,8 +42,7 @@ private:
 	void free() {
 		if (ptr) {
 			delete[] ptr;
-			ptr = nullptr;
-			length = 0;
+			drop();
 		}
 	}
 

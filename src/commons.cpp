@@ -9,10 +9,12 @@
 #include <stdlib.h>
 #include <vector>
 #include <string>
+#include <thread>
 #include <commons/core/Block.h>
 #include <commons/core/lang.hpp>
 #include <commons/core/Array.h>
-
+#include <commons/core/Timer.h>
+#include <commons/core/Performance.h>
 
 #include <stddef.h>
 #include <stdio.h>
@@ -21,7 +23,6 @@
 #include <string.h>
 #include <sys/socket.h>
 #include <sys/un.h>
-
 
 using namespace commons::core;
 
@@ -32,9 +33,10 @@ public:
 	char sex;
 
 	P() {
-		cout<< "Constructor"<<endl;
 		edad = 9;
 		sex = 'f';
+		//cout << "Constructor called"<<endl;
+		//fflush(stdout);
 	}
 };
 
@@ -57,8 +59,6 @@ void send2(Block<int>& r) {
 void send2(Block<float>& r) {
 
 }
-
-
 
 void test2() {
 	Block<float> A(10);
@@ -107,7 +107,7 @@ Block<int> ans() {
 
 }
 
-Array<P> ans2(){
+Array<P> ans2() {
 
 	Array<P> arr(3);
 
@@ -115,24 +115,47 @@ Array<P> ans2(){
 
 	println(&arr[0]);
 
-
 	return arr;
 
 }
+
+void main3() {
+	for (int i = 0; i < 5; i++) {
+		Timer t;
+
+		t.start();
+		Array<P> a { 10 };
+		t.end();
+
+		t.print();
+		t.print_seconds();
+		println(&a[0]);
+	}
+}
+
+void run() {
+
+	int r = (rand() / (double) RAND_MAX) * 5000;
+
+	Timer t;
+
+	long long took;
+	do {
+		t.end();
+		took = t.elapsed_micros();
+	} while (took < r);
+}
+
 
 mutex m;
 
 int main() {
 
+	srand(time(NULL));
 
-	Array<P> a{10};
+	Performance p(&run);
 
-
-	a = ans2();
-
-	println(&a[0]);
-
-
+	p.test(10, 1000);
 
 	return 0;
 }

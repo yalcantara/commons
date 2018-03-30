@@ -22,15 +22,8 @@ private:
 public:
 
 	Sync(mutex& mtx) :
-			Sync(mtx, true) {
-
-	}
-
-	Sync(mutex& mtx, bool lock) :
 			mtx(mtx) {
-		if (lock) {
-			mtx.lock();
-		}
+		mtx.lock();
 	}
 
 	//Rule of five
@@ -56,19 +49,6 @@ public:
 		mtx.unlock();
 	}
 	//=========================================================================
-
-	void lock() {
-		mtx.lock();
-	}
-
-	bool try_lock() {
-		return mtx.try_lock();
-	}
-
-	void unlock() {
-		mtx.unlock();
-	}
-
 };
 
 }
