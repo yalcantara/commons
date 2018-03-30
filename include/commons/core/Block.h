@@ -80,7 +80,6 @@ public:
 	Block<T>& operator=(const Block<T>& other) = delete;
 
 	//3. Move Constructor
-	//noexcept allows std containers to use it.
 	Block(Block<T> && other) noexcept {
 
 		this->length = other.length;
@@ -89,7 +88,7 @@ public:
 	}
 
 	//4. Move Assignment
-	//We don't allow Block to be copied.
+	//We don't allow Block to be moved.
 	Block<T>& operator=(Block<T> && other) = delete;
 
 	//5. Destructor

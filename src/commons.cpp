@@ -15,6 +15,7 @@
 #include <commons/core/Array.h>
 #include <commons/core/Timer.h>
 #include <commons/core/Performance.h>
+#include <commons/core/Lazy.h>
 
 #include <stddef.h>
 #include <stdio.h>
@@ -35,8 +36,11 @@ public:
 	P() {
 		edad = 9;
 		sex = 'f';
-		//cout << "Constructor called"<<endl;
-		//fflush(stdout);
+		println("Constructor called");
+	}
+
+	~P() {
+		cout << "destroyed" << endl;
 	}
 };
 
@@ -146,16 +150,22 @@ void run() {
 	} while (took < r);
 }
 
-
-mutex m;
+P call() {
+	P p;
+	return p;
+}
 
 int main() {
 
-	srand(time(NULL));
+	Lazy<P> l(&call);
 
-	Performance p(&run);
-
-	p.test(10, 1000);
+	println("About to get");
+	l.get();
+	println("Got it");
+	l.get();
+	println("Got it again");
+	l.get();
+	println("And again");
 
 	return 0;
 }

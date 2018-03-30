@@ -163,14 +163,14 @@ void println(double val) {
 	fflush(stdout);
 }
 
-void println(const char* val) {
+void println(const char* str) {
 	Sync sync(stdout_mutex);
-	fputs(val, stdout);
+	fputs(str, stdout);
 	fputc('\n', stdout);
 	fflush(stdout);
 }
 
-void println(string str) {
+void println(string& str) {
 	Sync sync(stdout_mutex);
 	const char* ptr = str.c_str();
 	fputs(ptr, stdout);
