@@ -15,7 +15,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <iostream>
+#include <codecvt>
 #include <string>
+#include <locale>
 #include <mutex>
 #include <vector>
 #include <sstream>
@@ -175,6 +177,14 @@ void println(string& str) {
 	const char* ptr = str.c_str();
 	fputs(ptr, stdout);
 	fputc('\n', stdout);
+	fflush(stdout);
+}
+
+void println(u16string& str) {
+	Sync sync(stdout_mutex);
+
+	std::wstring_convert<std::codecvt_utf8<char16_t>, char16_t> cv;
+	std::cout << cv.to_bytes(str) << endl;
 	fflush(stdout);
 }
 

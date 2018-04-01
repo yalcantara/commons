@@ -82,8 +82,8 @@ public:
 	//3. Move Constructor
 	Block(Block<T> && other) noexcept {
 
-		this->length = other.length;
 		this->ptr = other.ptr;
+		this->length = other.length;
 		other.drop();
 	}
 

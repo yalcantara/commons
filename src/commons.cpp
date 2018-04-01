@@ -16,6 +16,8 @@
 #include <commons/core/Timer.h>
 #include <commons/core/Performance.h>
 #include <commons/core/Lazy.h>
+#include <commons/web/Query.h>
+#include <commons/web/RestClient.h>
 
 #include <stddef.h>
 #include <stdio.h>
@@ -25,6 +27,7 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
+using namespace commons::web;
 using namespace commons::core;
 
 class P {
@@ -157,15 +160,23 @@ P call() {
 
 int main() {
 
-	Lazy<P> l(&call);
+	Query q;
+	q.put("method", "flickr.photos.getRecent");
+	q.put("api_key", "9ed5f887daf515511a3d64612498e9d0");
+	q.put("format", "json");
+	q.put("nojsoncallback", 1);
+	q.put("per_page", "10");
+	q.put("page", 1);
 
-	println("About to get");
-	l.get();
-	println("Got it");
-	l.get();
-	println("Got it again");
-	l.get();
-	println("And again");
+	q.print();
+
+
+
+	RestClient client("https://api.flickr.com");
+
+	Response r = client.get("/services/rest", q);
+
+	r.print();
 
 	return 0;
 }

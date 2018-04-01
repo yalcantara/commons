@@ -2,7 +2,7 @@
  * Timer.h
  *
  *  Created on: Mar 30, 2018
- *      Author: yaison
+ *      Author: Yaison Alcantara
  */
 
 #ifndef COMMONS_CORE_TIMER_H_
@@ -54,8 +54,33 @@ public:
 		Timer::print(took);
 	}
 
+	void print_millis() {
+		long long took = (_end - _start).count();
+		print_millis(took);
+	}
+
 	void print_seconds() {
-		long long took = duration_cast < nanoseconds > (_end - _start).count();
+		long long took = (_end - _start).count();
+		print_seconds(took);
+	}
+
+	static void print_millis(long long took) {
+
+		double d = took / 1000000.0;
+
+		if (took < 1000) {
+			printf("Took: %.6fms\n", d);
+		} else if (took < 1000000) {
+			printf("Took: %.3fms\n", d);
+		} else {
+			printf("Took: %.1fms\n", d);
+		}
+
+		fflush (stdout);
+	}
+
+	static void print_seconds(long long took) {
+
 		double d = took / 1000000000.0;
 
 		if (took < 1000) {
