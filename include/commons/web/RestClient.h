@@ -35,12 +35,18 @@ public:
 	}
 
 	Response get(const char* target) {
-
 		http_client client{root};
 
+		uri_builder b;
+		b.append(root);
+		b.append(target);
+		std::string log =  ("GET " + b.to_string());
+		println(log.c_str());
 
 		http_response res = client.request(methods::GET, target).get();
-		return Response(res);
+		Response ans{res};
+
+		return ans;
 	}
 
 	Response get(string& target) {
@@ -55,13 +61,9 @@ public:
 		b.append_query(q);
 
 		string target = b.to_string();
+
 		return get(target);
 	}
-
-	void get_foo(){
-
-	}
-
 };
 
 } /* namespace core */

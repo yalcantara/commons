@@ -16,11 +16,12 @@ namespace commons {
 namespace core {
 
 class Exception: public exception {
-private:
+protected:
 	string msg;
 
 public:
-	Exception():msg("") {
+	Exception() :
+			msg("") {
 
 	}
 
@@ -28,8 +29,13 @@ public:
 			msg(msg) {
 
 	}
-	
-	virtual const char* what()const throw(){
+
+	Exception(const char* msg) :
+			msg(msg) {
+
+	}
+
+	virtual const char* what() const throw () {
 		return msg.c_str();
 	}
 

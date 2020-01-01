@@ -27,16 +27,23 @@ public:
 
 	}
 
-	template<typename T>
-	void put(const char* name, T val) {
+	void put(const char* name, const char* val) {
 		_builder.append_query(name, val);
 	}
 
-	uri_builder& builder(){
+	void put(const char* name, string val) {
+		_builder.append_query(name, val);
+	}
+
+	void put(const char* name, unsigned int val) {
+		_builder.append_query(name, val);
+	}
+
+	uri_builder& builder() {
 		return _builder;
 	}
 
-	string to_string(){
+	string to_string() {
 		return _builder.query();
 	}
 

@@ -21,12 +21,9 @@ private:
 	std::function<void()> callback;
 
 public:
-	Performance(void (*callback)(void)) :
-			callback(callback) {
 
-	}
 
-	Performance(std::function<void()> callback) :
+	explicit Performance(std::function<void()> callback) :
 			callback(callback) {
 
 	}

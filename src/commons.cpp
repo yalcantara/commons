@@ -18,6 +18,7 @@
 #include <commons/core/Lazy.h>
 #include <commons/web/Query.h>
 #include <commons/web/RestClient.h>
+#include <boost/asio.hpp>
 
 #include <stddef.h>
 #include <stdio.h>
@@ -27,6 +28,8 @@
 #include <sys/socket.h>
 #include <sys/un.h>
 
+
+using namespace boost::asio;
 using namespace commons::web;
 using namespace commons::core;
 
@@ -172,11 +175,14 @@ int main() {
 
 
 
+
 	RestClient client("https://api.flickr.com");
 
 	Response r = client.get("/services/rest", q);
 
-	r.print();
+	JsonObject json = r.body_json_object();
+
+	json.print();
 
 	return 0;
 }

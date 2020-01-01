@@ -9,8 +9,11 @@
 #define COMMONS_WEB_RESPONSE_H_
 
 #include <commons/core/Lazy.h>
+#include <commons/core/lang.hpp>
+#include <commons/web/JsonObject.h>
 #include <cpprest/http_client.h>
 
+using namespace commons::core;
 using namespace web::http;
 
 namespace commons {
@@ -32,6 +35,13 @@ public:
 
 	unsigned short status_code(){
 		return delegator.status_code();
+	}
+
+	JsonObject body_json_object(){
+		json::value val = delegator.extract_json().get();
+		JsonObject ans{val};
+
+		return ans;
 	}
 
 	std::string body_utf8string(){
