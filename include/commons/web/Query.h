@@ -35,7 +35,7 @@ public:
 		_builder.append_query(name, val);
 	}
 
-	void put(const char* name, unsigned int val) {
+	void put(const char* name, long long val) {
 		_builder.append_query(name, val);
 	}
 

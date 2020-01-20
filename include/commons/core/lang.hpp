@@ -8,9 +8,7 @@
 #ifndef COMMONS_CORE_LANG_CPP_
 #define COMMONS_CORE_LANG_CPP_
 
-#ifndef byte
-#define byte unsigned char
-#endif
+
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -108,7 +106,7 @@ void print(float val) {
 	fflush(stdout);
 }
 
-void print(string& str) {
+void print(std::string& str) {
 	Sync sync(stdout_mutex);
 	const char* ptr = str.c_str();
 	fputs(ptr, stdout);
@@ -172,7 +170,7 @@ void println(const char* str) {
 	fflush(stdout);
 }
 
-void println(string& str) {
+void println(std::string& str) {
 	Sync sync(stdout_mutex);
 	const char* ptr = str.c_str();
 	fputs(ptr, stdout);
@@ -189,21 +187,35 @@ void println(u16string& str) {
 }
 
 //Other prints
-void println(vector<string>& vec) {
-	stringstream ss;
+void println(std::vector<string>& vec, bool horizontal) {
+    Sync sync(stdout_mutex);
 
-	ss << "[";
-	for (size_t i = 0; i < vec.size(); i++) {
-		string& e = vec[i];
-		ss << e;
-		if (i < vec.size()) {
-			ss << ", ";
+    std::size_t size = vec.size();
+
+	std::cout << "[";
+	for (std::size_t i = 0; i < size; i++) {
+		std::string& e = vec[i];
+        std::cout << e;
+		if ((i + 1) < size) {
+		    if(horizontal) {
+                std::cout << ", ";
+            }else{
+                std::cout << "," << std::endl;
+		    }
 		}
 	}
-	ss << "]";
+    std::cout << "]";
+    std::cout << std::endl;
+}
 
-	string str = ss.str();
-	println(str);
+void println(std::vector<string>& vec){
+    println(vec, true);
+}
+
+
+template<typename t>
+void insert_all(std::vector<t>& dest, std::vector<t> src){
+	dest.insert(std::end(dest), std::begin(src), std::end(src));
 }
 
 }

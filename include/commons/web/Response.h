@@ -12,6 +12,7 @@
 #include <commons/core/lang.hpp>
 #include <commons/web/JsonObject.h>
 #include <cpprest/http_client.h>
+#include <cpprest/uri.h>
 
 using namespace commons::core;
 using namespace web::http;
@@ -21,39 +22,47 @@ namespace web {
 
 class Response {
 private:
-	http_response delegator;
-
+	http_response _delegator;
+    uri _url;
 
 public:
 	Response(){
 
 	}
+    Response(http_response& res):_delegator(res){
 
-	Response(http_response& res):delegator(res){
+    }
+
+
+	Response(http_response& res, uri& url):_delegator(res), _url(url){
 
 	}
 
 	unsigned short status_code(){
-		return delegator.status_code();
+		return _delegator.status_code();
 	}
 
 	JsonObject body_json_object(){
-		json::value val = delegator.extract_json().get();
+		json::value val = _delegator.extract_json().get();
 		JsonObject ans{val};
 
 		return ans;
 	}
 
-	std::string body_utf8string(){
-		return delegator.extract_utf8string(true).get();
+	std::string body_utf8(){
+		return _delegator.extract_utf8string(true).get();
 	}
 
-	std::u16string body_string(){
-		return delegator.extract_utf16string(true).get();
+	std::u16string body_utf16(){
+		return _delegator.extract_utf16string(true).get();
+	}
+
+	uri url(){
+	    return _url;
 	}
 
 	void print(){
-		std::u16string body = body_string();
+		std::u16string body = body_utf16();
 
 		println(body);
 	}

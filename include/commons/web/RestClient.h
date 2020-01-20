@@ -11,45 +11,39 @@
 #include <commons/web/Response.h>
 #include <commons/web/Query.h>
 #include <cpprest/http_client.h>
+#include <cpprest/uri.h>
 
 using namespace utility;
 using namespace web;
 using namespace web::http;
 using namespace web::http::client;
-using namespace concurrency::streams;
 
 namespace commons {
 namespace web {
 
 class RestClient {
 private:
-	string root;
+	std::string root;
+    http_client client;
 
 public:
-	RestClient() {
 
-	}
 
-	RestClient(const char* root) :
-			root(root) {
+	RestClient(const char* root) :root(root), client(root) {
 	}
 
 	Response get(const char* target) {
-		http_client client{root};
-
-		uri_builder b;
-		b.append(root);
-		b.append(target);
-		std::string log =  ("GET " + b.to_string());
-		println(log.c_str());
-
 		http_response res = client.request(methods::GET, target).get();
-		Response ans{res};
+
+		uri_builder b{root};
+		b.append(target);
+		uri url = b.to_uri();
+		Response ans{res, url};
 
 		return ans;
 	}
 
-	Response get(string& target) {
+	Response get(std::string& target) {
 		const char* str = target.c_str();
 		return get(str);
 	}
