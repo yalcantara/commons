@@ -178,12 +178,30 @@ void println(std::string& str) {
 	fflush(stdout);
 }
 
+void println(std::string&& str) {
+    Sync sync(stdout_mutex);
+    const char* ptr = str.c_str();
+    fputs(ptr, stdout);
+    fputc('\n', stdout);
+    fflush(stdout);
+}
+
 void println(u16string& str) {
 	Sync sync(stdout_mutex);
 
 	std::wstring_convert<std::codecvt_utf8<char16_t>, char16_t> cv;
 	std::cout << cv.to_bytes(str) << endl;
 	fflush(stdout);
+}
+
+void println(string_view& view){
+    string txt{view};
+    println(txt);
+}
+
+void println(string_view&& view){
+    string txt{view};
+    println(txt);
 }
 
 //Other prints
