@@ -230,6 +230,32 @@ void println(std::vector<string>& vec){
     println(vec, true);
 }
 
+void print(ostringstream& oss, std::vector<string>& vec, bool horizontal) {
+
+
+    std::size_t size = vec.size();
+
+    oss << "[";
+    for (std::size_t i = 0; i < size; i++) {
+        std::string& e = vec[i];
+        oss << e;
+        if ((i + 1) < size) {
+            if(horizontal) {
+                oss << ", ";
+            }else{
+               oss << "," << std::endl;
+            }
+        }
+    }
+    oss << "]";
+}
+
+string vec_to_string(std::vector<string>& vec, bool horizontal){
+    ostringstream oss;
+    print(oss, vec, horizontal);
+    return oss.str();
+}
+
 
 template<typename t>
 void insert_all(std::vector<t>& dest, std::vector<t> src){

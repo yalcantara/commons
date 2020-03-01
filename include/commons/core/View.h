@@ -25,8 +25,8 @@ private:
 		if (idx >= length) {
 			throw Exception(
 					"Index out of bounds. The length is: "
-							+ to_string(length) + ", while the index is: "
-							+ to_string(idx) + ".");
+							+ std::to_string(length) + ", while the index is: "
+							+ std::to_string(idx) + ".");
 		}
 	}
 
