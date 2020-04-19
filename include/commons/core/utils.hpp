@@ -13,8 +13,16 @@
 namespace commons{
 namespace core{
 namespace utils{
-		
-	
+
+
+
+    long currentTimeMillis(){
+        //the type is: std::chrono::time_point<std::chrono::system_clock>
+        auto now = std::chrono::system_clock::now();
+        auto duration = now.time_since_epoch();
+        auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
+        return millis;
+    }
 
     // trim from start (in place)
     void ltrimi(std::string &s) {
