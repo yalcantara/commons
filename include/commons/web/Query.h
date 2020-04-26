@@ -35,9 +35,9 @@ public:
 		_builder.append_query(name, val);
 	}
 
-	void put(const char* name, long long val) {
-		_builder.append_query(name, val);
-	}
+    void put(const char* name, long int val) {
+        _builder.append_query(name, val);
+    }
 
 	uri_builder& builder() {
 		return _builder;

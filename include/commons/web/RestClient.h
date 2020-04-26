@@ -41,6 +41,10 @@ public:
 	RestClient(const char* root) :root(root), client(root) {
 	}
 
+    //Copy Constructor
+    //No copy constructor allowed
+    RestClient(const RestClient&) = delete;
+
 
 	Response get(const char* path_query_fragment) {
 
