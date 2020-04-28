@@ -20,8 +20,9 @@ namespace utils{
         //the type is: std::chrono::time_point<std::chrono::system_clock>
         auto now = std::chrono::system_clock::now();
         auto duration = now.time_since_epoch();
-        auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration).count();
-        return millis;
+        auto millis = std::chrono::duration_cast<std::chrono::milliseconds>(duration);
+        auto ans = millis.count();
+        return ans;
     }
 
     // trim from start (in place)
