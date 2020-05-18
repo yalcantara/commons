@@ -6,7 +6,6 @@
 
 #include <stdio.h>
 #include <sys/stat.h>
-#include <stdio.h>
 #include <commons/core/Exception.h>
 
 using commons::core::Exception;

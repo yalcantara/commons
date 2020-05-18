@@ -165,7 +165,11 @@ void println(double val) {
 
 void println(const char* str) {
 	Sync sync(stdout_mutex);
-	fputs(str, stdout);
+	if(str == NULL){
+	    fputs("null", stdout);
+	}else {
+        fputs(str, stdout);
+    }
 	fputc('\n', stdout);
 	fflush(stdout);
 }
